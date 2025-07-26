@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Upload Assignment</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Font and Icons -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --primary-bg: #0a0a0f;
+        --glass-bg: rgba(26, 26, 46, 0.3);
+        --glass-border: rgba(255, 255, 255, 0.1);
+        --neon-primary: #00d4ff;
+        --text-primary: #7fb0d9;
+        --text-secondary: #a0a0a0;
+        --error: #ff4757;
+        --success: #00ff88;
+        --blur: 16px;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background: var(--primary-bg);
+        color: var(--text-primary);
+        min-height: 100vh;
+        background-image: radial-gradient(
+            circle at 20% 80%,
+            rgba(120, 119, 198, 0.3),
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 80% 20%,
+            rgba(255, 119, 198, 0.3),
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 40% 40%,
+            rgba(120, 219, 255, 0.2),
+            transparent 50%
+          );
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+      }
+
+      .particles {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+      }
+
+      .particle {
+        position: absolute;
+        width: 2px;
+        height: 2px;
+        background: var(--neon-primary);
+        border-radius: 50%;
+        animation: float 6s ease-in-out infinite;
+        opacity: 0.6;
+      }
+
+      @keyframes float {
+        0%, 100% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-20px);
+          opacity: 1;
+        }
+      }
+
+      .form-container {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        max-width: 600px;
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        border-radius: 16px;
+        padding: 2rem;
+        backdrop-filter: blur(var(--blur));
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+      }
+
+      .form-container h1 {
+        text-align: center;
+        font-size: 2.5rem;
+        margin-bottom: 1.5rem;
+        color: var(--neon-primary);
+      }
+
+      .form-group {
+        margin-bottom: 1.2rem;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 0.4rem;
+        color: var(--text-secondary);
+      }
+
+      .form-group input,
+      .form-group textarea,
+      .form-group select {
+        width: 100%;
+        padding: 0.8rem;
+        border-radius: 10px;
+        border: none;
+        background: rgba(255, 255, 255, 0.05);
+        color: var(--text-primary);
+        font-size: 1rem;
+      }
+
+      .form-group select {
+        background-color: rgba(255, 255, 255, 0.05);
+      }
+
+      .form-group input:focus,
+      .form-group textarea:focus,
+      .form-group select:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px var(--neon-primary);
+      }
+
+      .btn {
+        background: var(--neon-primary);
+        color: #000;
+        border: none;
+        padding: 0.9rem 1.5rem;
+        font-size: 1rem;
+        border-radius: 10px;
+        cursor: pointer;
+        width: 100%;
+        font-weight: bold;
+        transition: 0.3s;
+      }
+
+      .btn:hover {
+        background: #00aacc;
+      }
+
+      .toast {
+        margin-top: 1rem;
+        text-align: center;
+        font-weight: bold;
+        font-size: 1rem;
+      }
+
+      .toast.error {
+        color: var(--error);
+      }
+
+      .toast.success {
+        color: var(--success);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="particles" id="particles"></div>
+
+    <div class="form-container">
+      <h1>📤 Upload Assignment</h1>
+      <form id="uploadForm">
+        <div class="form-group">
+          <label for="title">Title:</label>
+          <input type="text" id="title" required />
+        </div>
+
+        <div class="form-group">
+          <label for="description">Description:</label>
+          <textarea id="description" rows="4" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="language">Language:</label>
+          <select id="language" required>
+            <option value="">Select Language</option>
+            <option value="HTML/CSS/JS">HTML/CSS/JS</option>
+            <option value="C">C</option>
+            <option value="CPP">C++</option>
+            <option value="JAVA">JAVA</option>
+            <option value="Python">Python</option>
+          </select>
+        </div>
+
+        <button class="btn" type="submit">Upload</button>
+        <div id="toast" class="toast"></div>
+      </form>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+    <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyDovyDP6TTMQ-8lX9Mmu5SmZfe6quRwKxQ",
+        authDomain: "teachncode-a102d.firebaseapp.com",
+        projectId: "teachncode-a102d",
+        storageBucket: "teachncode-a102d.appspot.com",
+        messagingSenderId: "560847918054",
+        appId: "1:560847918054:web:0923883e400d8fd6147c27",
+      };
+
+      firebase.initializeApp(firebaseConfig);
+      const auth = firebase.auth();
+      const db = firebase.firestore();
+
+      const adminEmails = [
+        "sunainaseervi2007@gmail.com",
+        "aangirahul15@gmail.com",
+      ];
+
+      const toastEl = document.getElementById("toast");
+      const showToast = (message, type = "") => {
+        toastEl.textContent = message;
+        toastEl.className = "toast " + type;
+      };
+
+      // Background particles
+      function createParticles() {
+        const container = document.getElementById("particles");
+        for (let i = 0; i < 50; i++) {
+          const p = document.createElement("div");
+          p.className = "particle";
+          p.style.left = Math.random() * 100 + "%";
+          p.style.top = Math.random() * 100 + "%";
+          p.style.animationDelay = Math.random() * 6 + "s";
+          p.style.animationDuration = Math.random() * 3 + 3 + "s";
+          container.appendChild(p);
+        }
+      }
+      createParticles();
+
+      auth.onAuthStateChanged((user) => {
+        if (!user || !adminEmails.includes(user.email)) {
+          showToast("Access denied. Admins only.", "error");
+          setTimeout(() => (window.location.href = "dashboard.html"), 2000);
+          return;
+        }
+
+        // 🔒 User is authenticated and is an admin
+        const uploadForm = document.getElementById("uploadForm");
+        const titleInput = document.getElementById("title");
+        const descriptionInput = document.getElementById("description");
+        const languageSelect = document.getElementById("language");
+
+        uploadForm.addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          const title = titleInput.value.trim();
+          const description = descriptionInput.value.trim();
+          const language = languageSelect.value;
+
+          if (!title || !description || !language) {
+            showToast("Please complete the form.", "error");
+            return;
+          }
+
+          showToast("Uploading assignment...", "info");
+
+          try {
+            await db.collection("assignments").add({
+              title,
+              description,
+              language,
+              teacherId: user.uid,
+              createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            });
+
+            showToast("Assignment uploaded successfully!", "success");
+            uploadForm.reset();
+            setTimeout(() => (window.location.href = "dashboard.html"), 1500);
+          } catch (err) {
+            console.error("Upload error:", err);
+            showToast("Failed to upload assignment.", "error");
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

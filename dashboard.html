@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    /* Import all your CSS from part 1 and part 2 here (everything you pasted above) */
+    /* --- CSS from part 1 and 2 goes here --- */
+    :root {
+        --primary-bg: #0a0a0f;
+        --secondary-bg: #1a1a2e;
+        --glass-bg: rgba(26, 26, 46, 0.3);
+        --glass-border: rgba(255, 255, 255, 0.1);
+        --neon-primary: #00d4ff;
+        --neon-secondary: #ff006e;
+        --neon-accent: #8b5cf6;
+        --text-primary: #ffffff;
+        --text-secondary: #a0a0a0;
+        --text-muted: #666666;
+        --success: #00ff88;
+        --warning: #ffaa00;
+        --error: #ff4757;
+        --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        --gradient-accent: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        --shadow-glass: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        --shadow-neon: 0 0 20px rgba(0, 212, 255, 0.3);
+        --blur: 16px;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background: var(--primary-bg);
+        color: var(--text-primary);
+        line-height: 1.6;
+        overflow-x: hidden;
+        min-height: 100vh;
+        background-image: radial-gradient(
+            circle at 20% 80%,
+            rgba(120, 119, 198, 0.3),
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 80% 20%,
+            rgba(255, 119, 198, 0.3),
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 40% 40%,
+            rgba(120, 219, 255, 0.2),
+            transparent 50%
+          );
+      }
+
+      /* Animated background particles */
+      .particles {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      .particle {
+        position: absolute;
+        width: 2px;
+        height: 2px;
+        background: var(--neon-primary);
+        border-radius: 50%;
+        animation: float 6s ease-in-out infinite;
+        opacity: 0.6;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0px) rotate(0deg);
+          opacity: 0.6;
+        }
+        50% {
+          transform: translateY(-20px) rotate(180deg);
+          opacity: 1;
+        }
+      }
+
+      /* Header Styles */
+      header {
+        backdrop-filter: blur(var(--blur));
+        -webkit-backdrop-filter: blur(var(--blur));
+        background: var(--glass-bg);
+        border-bottom: 1px solid var(--glass-border);
+        padding: 1rem 0;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        box-shadow: var(--shadow-glass);
+      }
+
+      .header-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 2rem;
+      }
+
+      .logo {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 1.8rem;
+        font-weight: 700;
+        background: var(--gradient-accent);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        text-decoration: none;
+        transition: all 0.3s ease;
+      }
+
+      .logo:hover {
+        transform: scale(1.05);
+        filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.5));
+      }
+
+      nav ul {
+        display: flex;
+        list-style: none;
+        gap: 2rem;
+        align-items: center;
+      }
+
+      nav a {
+        color: var(--text-secondary);
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        position: relative;
+        padding: 0.5rem 1rem;
+        border-radius: 2rem;
+        background: transparent;
+      }
+
+      nav a:hover {
+        color: var(--text-primary);
+        background: rgba(255, 255, 255, 0.1);
+        transform: translateY(-2px);
+      }
+
+      nav a::after {
+        content: "";
+        position: absolute;
+        bottom: -5px;
+        left: 50%;
+        width: 0;
+        height: 2px;
+        background: var(--gradient-accent);
+        transition: all 0.3s ease;
+        transform: translateX(-50%);
+      }
+
+      nav a:hover::after {
+        width: 80%;
+      }
+
+      /* Main Content */
+      .dashboard-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 3rem 2rem;
+        position: relative;
+        z-index: 10;
+      }
+
+      .hero-section {
+        text-align: center;
+        margin-bottom: 4rem;
+        animation: fadeInUp 1s ease-out;
+      }
+
+      .hero-title {
+        font-size: 3.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        background: var(--gradient-primary);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        line-height: 1.2;
+      }
+
+      .hero-subtitle {
+        font-size: 1.4rem;
+        color: var(--text-secondary);
+        margin-bottom: 2rem;
+        font-weight: 400;
+      }
+
+      .role-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 2rem;
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        border-radius: 2rem;
+        backdrop-filter: blur(var(--blur));
+        font-weight: 600;
+        font-size: 1.1rem;
+        margin-bottom: 2rem;
+        box-shadow: var(--shadow-glass);
+      }
+
+      /* Section Styles */
+      .section {
+        margin-bottom: 4rem;
+        animation: fadeInUp 1s ease-out 0.2s both;
+      }
+
+      .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+
+      .section-title {
+        font-size: 2rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .section-title i {
+        color: var(--neon-primary);
+        font-size: 1.5rem;
+      }
+
+      /* Card Grid */
+      .cards-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+      }
+
+      /* Glass Card Styles */
+      .glass-card {
+        background: var(--glass-bg);
+        backdrop-filter: blur(var(--blur));
+        -webkit-backdrop-filter: blur(var(--blur));
+        border: 1px solid var(--glass-border);
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: var(--shadow-glass);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+        min-height: 280px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .glass-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: var(--gradient-accent);
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+      }
+
+      .glass-card:hover::before {
+        transform: translateX(0);
+      }
+
+      .glass-card:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: var(--shadow-glass), var(--shadow-neon);
+        border-color: rgba(0, 212, 255, 0.3);
+      }
+
+      .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 1rem;
+        gap: 1rem;
+      }
+
+      .card-title {
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        line-height: 1.3;
+        flex: 1;
+      }
+
+      .card-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+        background: var(--gradient-accent);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        color: white;
+        flex-shrink: 0;
+      }
+
+      .card-description {
+        color: var(--text-secondary);
+        font-size: 0.95rem;
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+        flex-grow: 1;
+      }
+
+      .card-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .meta-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+      }
+
+      .meta-item i {
+        color: var(--neon-primary);
+        width: 16px;
+      }
+
+      /* Status Badges */
+      .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.4rem 1rem;
+        border-radius: 2rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .status-not-started {
+        background: rgba(255, 170, 0, 0.2);
+        color: var(--warning);
+        border: 1px solid rgba(255, 170, 0, 0.3);
+      }
+
+      .status-submitted {
+        background: rgba(0, 212, 255, 0.2);
+        color: var(--neon-primary);
+        border: 1px solid rgba(0, 212, 255, 0.3);
+      }
+
+      .status-graded {
+        background: rgba(0, 255, 136, 0.2);
+        color: var(--success);
+        border: 1px solid rgba(0, 255, 136, 0.3);
+      }
+
+      /* Button Styles */
+      .btn {
+        background: var(--gradient-primary);
+        color: white;
+        border: none;
+        padding: 0.75rem 2rem;
+        border-radius: 2rem;
+        font-weight: 600;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        position: relative;
+        overflow: hidden;
+        margin-top: auto;
+      }
+
+      .btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: left 0.5s;
+      }
+
+      .btn:hover::before {
+        left: 100%;
+      }
+
+      .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      }
+
+      .btn-secondary {
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        backdrop-filter: blur(var(--blur));
+      }
+
+      .btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: var(--neon-primary);
+      }
+
+      .btn-create {
+        background: var(--gradient-secondary);
+        font-size: 1.1rem;
+        padding: 1rem 3rem;
+        border-radius: 3rem;
+      }
+
+      /* Empty State */
+      .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+        color: var(--text-muted);
+        animation: fadeIn 1s ease-out 0.5s both;
+      }
+
+      .empty-state i {
+        font-size: 4rem;
+        color: var(--text-muted);
+        margin-bottom: 1rem;
+        opacity: 0.6;
+      }
+
+      .empty-state h3 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        color: var(--text-secondary);
+      }
+
+      /* Toast Styles */
+      .toast {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        background: var(--glass-bg);
+        backdrop-filter: blur(var(--blur));
+        border: 1px solid var(--glass-border);
+        border-radius: 1rem;
+        padding: 1rem 1.5rem;
+        color: var(--text-primary);
+        box-shadow: var(--shadow-glass);
+        z-index: 1000;
+        opacity: 0;
+        transform: translateX(100%);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        max-width: 400px;
+      }
+
+      .toast.show {
+        opacity: 1;
+        transform: translateX(0);
+      }
+
+      .toast.success {
+        border-color: var(--success);
+        box-shadow: var(--shadow-glass), 0 0 20px rgba(0, 255, 136, 0.3);
+      }
+
+      .toast.error {
+        border-color: var(--error);
+        box-shadow: var(--shadow-glass), 0 0 20px rgba(255, 71, 87, 0.3);
+      }
+
+      .toast.info {
+        border-color: var(--neon-primary);
+        box-shadow: var(--shadow-glass), 0 0 20px rgba(0, 212, 255, 0.3);
+      }
+
+      /* Animations */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Mobile Responsiveness */
+      @media (max-width: 768px) {
+        .header-container {
+          padding: 0 1rem;
+          flex-direction: column;
+          gap: 1rem;
+        }
+
+        .logo {
+          font-size: 1.5rem;
+        }
+
+        nav ul {
+          gap: 1rem;
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+
+        nav a {
+          padding: 0.4rem 0.8rem;
+          font-size: 0.9rem;
+        }
+
+        .dashboard-container {
+          padding: 2rem 1rem;
+        }
+
+        .hero-title {
+          font-size: 2.5rem;
+        }
+
+        .hero-subtitle {
+          font-size: 1.2rem;
+        }
+
+        .cards-grid {
+          grid-template-columns: 1fr;
+          gap: 1.5rem;
+        }
+
+        .section-header {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .section-title {
+          font-size: 1.5rem;
+        }
+
+        .glass-card {
+          padding: 1.5rem;
+          min-height: auto;
+        }
+
+        .toast {
+          bottom: 1rem;
+          right: 1rem;
+          left: 1rem;
+          max-width: none;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .hero-title {
+          font-size: 2rem;
+        }
+
+        .hero-subtitle {
+          font-size: 1rem;
+        }
+
+        .role-badge {
+          padding: 0.5rem 1.5rem;
+          font-size: 1rem;
+        }
+      }
+
+      /* Scrollbar Styling */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: var(--primary-bg);
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: var(--gradient-accent);
+        border-radius: 4px;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: var(--neon-primary);
+      }
+
+      /* Loading Animation */
+      .loading {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: var(--neon-primary);
+        animation: spin 1s ease-in-out infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+    /* Additional icon styling for card icons */
+    .card-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      background: var(--gradient-accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      color: white;
+      flex-shrink: 0;
+      box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+    }
+
+    .meta-item i {
+      color: var(--neon-primary);
+    }
+  </style>
+</head>
+<body>
+  <!-- All HTML structure from your Part 2 goes here (navbar, hero section, containers...) -->
+    <!-- Animated Background Particles -->
+    <div class="particles" id="particles"></div>
+
+    <header>
+      <div class="header-container">
+        <a href="#" class="logo">
+          <i class="fas fa-code"></i>
+          Teachncode
+        </a>
+        <nav>
+          <ul id="navLinks">
+            <!-- Dynamic links injected here -->
+             <li>
+              <a href="index.html"><i class="fas fa-home"></i> Home</a>
+            </li>
+            <li>
+              <a href="dashboard.html"
+                ><i class="fas fa-tachometer-alt"></i> Dashboard</a
+              >
+            </li>
+            <li>
+              <a href="editor.html"><i class="fas fa-code"></i> Editor</a>
+            </li>
+            <li>
+              <a href="Leaderboard.html"
+                ><i class="fas fa-trophy"></i> Leaderboard</a
+              >
+            </li>
+            <li>
+              <a href="#" onclick="logout()"
+                ><i class="fas fa-sign-out-alt"></i> Logout</a
+              >
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <div class="dashboard-container">
+      <div class="hero-section">
+        <h1 class="hero-title">Welcome back, <span id="userName">User</span></h1>
+        <p class="hero-subtitle" id="roleTitle">Your Dashboard</p>
+        <div class="role-badge" id="roleBadge">
+          <i class="fas fa-user"></i>
+          <span id="roleText">Loading...</span>
+        </div>
+      </div>
+
+      <!-- Student Section -->
+      <div id="studentSection" style="display: none">
+        <div class="section">
+          <div class="section-header">
+            <h2 class="section-title">
+              <i class="fas fa-tasks"></i>
+              Your Assignments
+            </h2>
+          </div>
+          <div id="studentAssignmentsList" class="cards-grid"></div>
+          <div id="noStudentAssignments" class="empty-state" style="display: none">
+            <i class="fas fa-clipboard-list"></i>
+            <h3>No Assignments Yet</h3>
+            <p>Check back later for new coding challenges!</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Admin Section -->
+      <div id="teacherSection" style="display: none">
+        <div class="section">
+          <div class="section-header">
+            <h2 class="section-title">
+              <i class="fas fa-chalkboard-teacher"></i>
+              Assignments Management
+            </h2>
+            <a href="review-submission.html?id=SUBMISSION_ID"></a>
+            <a href="upload-assignment.html" class="btn btn-create">
+              <i class="fas fa-upload"></i>
+              Upload Assignments
+            </a>
+          </div>
+          <div id="teacherAssignmentsList" class="cards-grid"></div>
+          <div id="noTeacherAssignments" class="empty-state" style="display: none">
+            <i class="fas fa-plus-circle"></i>
+            <h3>No Assignments Created</h3>
+            <p>Create your first assignment to get started!</p>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-header">
+            <h2 class="section-title">
+              <i class="fas fa-user-graduate"></i>
+              Student Submissions
+            </h2>
+          </div>
+          <div id="studentSubmissionsList" class="cards-grid"></div>
+          <div id="noStudentSubmissions" class="empty-state" style="display: none">
+            <i class="fas fa-inbox"></i>
+            <h3>No Submissions Yet</h3>
+            <p>Student submissions will appear here once they start completing assignments.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Message Element -->
+    <div id="dashboardToast" class="toast"></div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+    <script>
+  function showToast(message, type = "info") {
+    const toastElement = document.getElementById("dashboardToast");
+    if (toastElement) {
+      const iconClass =
+        type === "success"
+          ? "fas fa-check-circle"
+          : type === "error"
+          ? "fas fa-exclamation-circle"
+          : "fas fa-info-circle";
+      toastElement.innerHTML = `<i class="${iconClass}"></i> ${message}`;
+      toastElement.className = `toast show ${type}`;
+      setTimeout(() => {
+        toastElement.classList.remove("show");
+      }, 4000);
+    } else {
+      console.warn("Toast element not found. Message:", message);
+    }
+  }
+
+  function createParticles() {
+    const p = document.getElementById("particles");
+    if (!p) return;
+    p.innerHTML = "";
+    const count = window.innerWidth < 768 ? 30 : 50;
+    for (let i = 0; i < count; i++) {
+      const el = document.createElement("div");
+      el.className = "particle";
+      el.style.left = Math.random() * 100 + "%";
+      el.style.top = Math.random() * 100 + "%";
+      el.style.animationDelay = Math.random() * 6 + "s";
+      el.style.animationDuration = Math.random() * 3 + 3 + "s";
+      p.appendChild(el);
+    }
+  }
+  window.onload = createParticles;
+  window.addEventListener("resize", createParticles);
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDovyDP6TTMQ-8lX9Mmu5SmZfe6quRwKxQ",
+    authDomain: "teachncode-a102d.firebaseapp.com",
+    projectId: "teachncode-a102d",
+    storageBucket: "teachncode-a102d.firebasestorage.app",
+    messagingSenderId: "560847918054",
+    appId: "1:560847918054:web:0923883e400d8fd6147c27",
+    measurementId: "G-HHYPF04HLD",
+  };
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.firestore();
+
+  const admins = ["sunainaseervi2007@gmail.com", "aangirahul15@gmail.com"];
+  const navLinks = document.getElementById("navLinks");
+
+  function buildHeaderLinks(isAdmin) {
+    navLinks.innerHTML = `
+      <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+      <li><a href="dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+      ${isAdmin 
+        ? `<li><a href="upload-assignment.html"><i class="fas fa-upload"></i> Upload Assignments</a></li>` 
+        : `<li><a href="editor.html"><i class="fas fa-code"></i> Editor</a></li>`}
+      <li><a href="Leaderboard.html"><i class="fas fa-trophy"></i> Leaderboard</a></li>
+      <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+    `;
+  }
+
+  auth.onAuthStateChanged(async user => {
+    if (!user) return setTimeout(() => window.location = "login.html", 2000);
+
+    const isAdmin = admins.includes(user.email);
+    buildHeaderLinks(isAdmin);
+
+    const nameEl = document.getElementById("userName");
+    const titleEl = document.getElementById("roleTitle");
+    const roleBadge = document.getElementById("roleText");
+    const studentSec = document.getElementById("studentSection");
+    const teacherSec = document.getElementById("teacherSection");
+
+    try {
+      const doc = await db.collection("users").doc(user.uid).get();
+      const name = doc.exists && doc.data().fullName ? doc.data().fullName : user.email;
+      nameEl.textContent = name;
+      localStorage.setItem("vcc_user", name);
+
+      if (isAdmin) {
+        titleEl.textContent = "Admin Dashboard";
+        roleBadge.textContent = "Admin";
+        teacherSec.style.display = "block";
+        showToast(`Welcome back, Admin ${name}!`, "success");
+        fetchAdminData(); // 🧠 Admin logic here
+      } else {
+        titleEl.textContent = "Student Dashboard";
+        roleBadge.textContent = "Student";
+        studentSec.style.display = "block";
+        showToast(`Welcome back, ${name}!`, "success");
+        fetchDisplay(user.uid); // 🎓 Student logic here
+      }
+    } catch (e) {
+      console.error("Profile fetch error:", e);
+      showToast("Error loading profile.", "error");
+      setTimeout(() => window.location = "login.html", 2000);
+    }
+  });
+
+  function startAssignment(id) {
+    showToast("Redirecting…", "info");
+    setTimeout(() => window.location = `assignment.html?id=${id}`, 1000);
+  }
+
+  function reviewSubmission(id) {
+    showToast("Opening submission...", "info");
+    setTimeout(() => window.location = `review-submission.html?id=${id}`, 1000);
+  }
+
+  function logout() {
+    auth.signOut().then(() => {
+      showToast("Logged out", "success");
+      localStorage.removeItem("vcc_user");
+      setTimeout(() => window.location = "login.html", 1500);
+    }).catch(e => {
+      console.error(e);
+      showToast("Error logging out", "error");
+    });
+  }
+</script>
+   
+
+  <!-- Replace just the fetchDisplay() function below -->
+  <script>
+    async function fetchDisplay(studentId) {
+  const assignmentsContainer = document.getElementById("studentAssignmentsList");
+  const noAssignmentsMessage = document.getElementById("noStudentAssignments");
+
+  try {
+    const snapshot = await db.collection("assignments").get();
+    if (snapshot.empty) {
+      noAssignmentsMessage.style.display = "block";
+      return;
+    }
+
+    // Fetch student submissions
+    const studentSubmissionsSnapshot = await db
+      .collection("submissions")
+      .where("studentId", "==", studentId)
+      .get();
+
+    const studentSubmissionsMap = {};
+    studentSubmissionsSnapshot.forEach((doc) => {
+      const data = doc.data();
+      studentSubmissionsMap[data.assignmentId] = data;
+    });
+
+    snapshot.forEach((doc) => {
+      const data = doc.data();
+      const submission = studentSubmissionsMap[doc.id];
+
+      let statusText = "Not Started";
+      let statusClass = "status-not-started";
+
+      if (submission) {
+        statusText = submission.status;
+        statusClass =
+          submission.status === "Graded"
+            ? "status-graded"
+            : "status-submitted";
+      }
+
+      const card = document.createElement("div");
+      card.className = "glass-card";
+      card.innerHTML = `
+        <div class="card-header">
+          <div class="card-icon"><i class="fas fa-code"></i></div>
+          <div class="card-title">${data.title}</div>
+        </div>
+        <div class="card-description">${data.description || "No description available."}</div>
+        <div class="card-meta">
+          <div class="meta-item"><i class="fas fa-calendar-alt"></i> ${data.dueDate || "No Due Date"}</div>
+          <div class="meta-item"><i class="fas fa-terminal"></i> ${data.language || "Unknown"}</div>
+          <div class="status-badge ${statusClass}">${statusText}</div>
+        </div>
+        <button class="btn" onclick="startAssignment('${doc.id}')">
+          <i class="fas fa-play-circle"></i> Start
+        </button>
+      `;
+      assignmentsContainer.appendChild(card);
+    });
+  } catch (error) {
+    console.error("Error fetching student assignments:", error);
+    showToast("Failed to load assignments.", "error");
+  }
+}
+
+
+    async function fetchAdminData() {
+      const assignmentList = document.getElementById("teacherAssignmentsList");
+      const noAssignments = document.getElementById("noTeacherAssignments");
+
+      const submissionList = document.getElementById("studentSubmissionsList");
+      const noSubmissions = document.getElementById("noStudentSubmissions");
+
+      try {
+        const assignmentSnap = await db.collection("assignments").get();
+        if (assignmentSnap.empty) {
+          noAssignments.style.display = "block";
+        } else {
+          assignmentSnap.forEach(doc => {
+            const data = doc.data();
+            const card = document.createElement("div");
+            card.className = "glass-card";
+            card.innerHTML = `
+              <div class="card-header">
+                <div class="card-icon"><i class="fas fa-clipboard"></i></div>
+                <div class="card-title">${data.title}</div>
+              </div>
+              <div class="card-description">${data.description || "No description."}</div>
+              <div class="card-meta">
+                <div class="meta-item"><i class="fas fa-calendar"></i> ${data.dueDate || "No Due Date"}</div>
+                <div class="meta-item"><i class="fas fa-code"></i> ${data.language || "Unknown"}</div>
+              </div>
+            `;
+            assignmentList.appendChild(card);
+          });
+        }
+
+        const submissionSnap = await db.collection("submissions").get();
+        if (submissionSnap.empty) {
+          noSubmissions.style.display = "block";
+        } else {
+          submissionSnap.forEach(doc => {
+            const data = doc.data();
+            const card = document.createElement("div");
+            card.className = "glass-card";
+            card.innerHTML = `
+              <div class="card-header">
+                <div class="card-icon"><i class="fas fa-user"></i></div>
+                <div class="card-title">${data.studentEmail}</div>
+              </div>
+              <div class="card-description">
+                Submitted in <strong>${data.language?.toUpperCase()}</strong><br>
+                Status: ${data.status || "Pending"}
+              </div>
+              <button class="btn" onclick="reviewSubmission('${doc.id}')">
+                <i class="fas fa-eye"></i> Review
+              </button>
+            `;
+            submissionList.appendChild(card);
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching admin data:", error);
+        showToast("Error loading admin data.", "error");
+      }
+    }
+  </script>
+</body>
+</html>
