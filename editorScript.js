@@ -244,7 +244,7 @@ async function runCode() {
             console.log(`Backend listening at http://localhost:${port}`);
         });
       */
-      const res = await fetch("http://localhost:3000/run", {
+      const res = await fetch("https://teachncode-teachncode-backend.onrender.com/run", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
