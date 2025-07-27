@@ -6,7 +6,14 @@ const cors = require("cors");
 const app = express();
 const PORT = 3000;
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://teachncode.vercel.app", // ✅ Allow your frontend on Vercel
+    methods: ["GET", "POST"],
+    credentials: true,
+  })
+);
+
 app.use(express.json());
 
 // Language mapping for Judge0 API (language_id values)
