@@ -251,7 +251,7 @@ async function runCode() {
         },
         body: JSON.stringify({ language: selectedLang, code, input }),
       });
-
+ 
       const data = await res.json();
       output = data.output || data.error || "No output or error received.";
       previewFrame.srcdoc = `<pre>${output}</pre>`;

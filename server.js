@@ -8,7 +8,7 @@ const PORT = 3000;
 
 app.use(
   cors({
-    origin: "https://teachncode.vercel.app", // ✅ Allow your frontend on Vercel
+    origin: ["https://teachncode.vercel.app", "http://127.0.0.1:5500", "http://localhost:5500"],
     methods: ["GET", "POST"],
     credentials: true,
   })
